@@ -21,7 +21,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
 
@@ -45,12 +44,12 @@ export function AppSidebar() {
 
   return (
     <Sidebar
-      className="border-r border-sidebar-border bg-gradient-to-b from-[hsl(0,0%,10%)] to-[hsl(0,0%,8%)]"
+      className="w-[260px] border-r border-sidebar-border bg-gradient-to-b from-card to-sidebar shadow-[2px_0_10px_rgba(0,0,0,0.5)]"
       collapsible="icon"
     >
       <SidebarHeader className="border-b border-sidebar-border px-5 py-6">
         {!collapsed && (
-          <h2 className="text-xl font-bold text-white tracking-tight">
+          <h2 className="text-[1.4rem] font-bold text-white tracking-tight">
             OP-DBUS Control
           </h2>
         )}
@@ -61,7 +60,7 @@ export function AppSidebar() {
         )}
       </SidebarHeader>
 
-      <SidebarContent className="py-3">
+      <SidebarContent className="py-3 overflow-y-auto">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -78,7 +77,7 @@ export function AppSidebar() {
                         to={item.url}
                         end={item.url === "/"}
                         className={`
-                          flex items-center gap-3 px-5 py-3.5 text-sidebar-foreground
+                          flex items-center gap-3 px-5 py-3.5 text-sidebar-foreground font-medium
                           transition-all duration-150 border-l-[3px] border-transparent
                           hover:bg-white/5 hover:text-white
                         `}
@@ -86,7 +85,7 @@ export function AppSidebar() {
                       >
                         <item.icon className="h-5 w-5 shrink-0" />
                         {!collapsed && (
-                          <span className="font-medium">{item.title}</span>
+                          <span>{item.title}</span>
                         )}
                       </NavLink>
                     </SidebarMenuButton>

@@ -11,12 +11,17 @@ export function Layout({ children }: LayoutProps) {
       <div className="min-h-screen flex w-full">
         <AppSidebar />
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Header with sidebar trigger */}
-          <header className="h-14 flex items-center border-b border-border px-4 bg-card/50 backdrop-blur-sm">
-            <SidebarTrigger className="mr-4" />
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-              <span className="text-sm text-muted-foreground">Connected</span>
+          {/* Header with glass effect */}
+          <header className="h-14 flex items-center justify-between border-b border-border px-6 bg-glass sticky top-0 z-50">
+            <div className="flex items-center gap-4">
+              <SidebarTrigger />
+              <div className="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-card border border-border">
+                <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                <span className="text-success">Connected</span>
+              </div>
+            </div>
+            <div className="text-sm text-muted-foreground">
+              {/* Right side header content if needed */}
             </div>
           </header>
           

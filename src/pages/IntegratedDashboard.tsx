@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ChatPanel, ChatMessage } from "@/components/dashboard/ChatPanel";
 import {
   SystemMonitor,
@@ -12,7 +12,6 @@ import { MetricsOverview, SystemMetrics } from "@/components/dashboard/MetricsOv
 
 // Mock metrics data - will be replaced with real API calls
 const mockMetrics: SystemMetrics = {
-  // System
   hostname: "op-dbus-server",
   kernel: "Linux 6.1.0-18-amd64",
   uptime: "14d 3h 22m",
@@ -21,8 +20,6 @@ const mockMetrics: SystemMetrics = {
   memoryFormatted: "4.2 GB / 16 GB",
   cpuCores: 8,
   cpuUsage: 12.5,
-  
-  // Tools - every D-Bus object is a tool
   totalTools: 16847,
   toolsByCategory: {
     dbus: 15234,
@@ -33,30 +30,19 @@ const mockMetrics: SystemMetrics = {
     plugin: 78,
     other: 66,
   },
-  
-  // Agents
   agentTypesAvailable: 70,
   agentInstancesRunning: 12,
-  
-  // LLM
   llmProvider: "Gemini",
   llmModel: "gemini-2.0-flash",
   llmAvailable: true,
-  
-  // Network
   networkInterfaces: 8,
   interfacesUp: 6,
-  
-  // Services
   servicesActive: 47,
   servicesTotal: 52,
-  
-  // Connections
   connectedUsers: 3,
   activeSessions: 5,
 };
 
-// Mock data for services and tools panels
 const mockServices: SystemService[] = [
   { id: "1", name: "nginx.service", status: "active", subState: "running" },
   { id: "2", name: "postgresql.service", status: "active", subState: "running" },
@@ -117,7 +103,6 @@ export default function IntegratedDashboard() {
     setMessages((prev) => [...prev, userMessage]);
     setIsProcessing(true);
 
-    // Simulate AI response
     setTimeout(() => {
       const toolCall: ToolCall = {
         id: Date.now().toString(),
@@ -140,38 +125,38 @@ export default function IntegratedDashboard() {
   };
 
   return (
-    <div className="flex h-full">
-      {/* Chat Panel - 1/3 width */}
-      <div className="w-1/3 border-r border-border bg-background flex flex-col">
+    <div className="flex flex-col h-full">
+      {/* Top Section: Metrics + Monitor + Tool Log */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left: Metrics Overview */}
+        <div className="flex-1 p-4 overflow-y-auto border-r border-border">
+          <MetricsOverview metrics={metrics} />
+        </div>
+        
+        {/* Right: System Monitor + Tool Log stacked */}
+        <div className="w-1/2 flex flex-col overflow-hidden">
+          <div className="flex-1 p-4 overflow-y-auto border-b border-border">
+            <SystemMonitor
+              services={mockServices}
+              dbusServices={mockDbusServices}
+              diagnostics={mockDiagnostics}
+              tools={mockTools}
+              connectionStatus={connectionStatus}
+            />
+          </div>
+          <div className="h-[200px] min-h-[150px]">
+            <ToolLog logs={toolLogs} />
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom: Chat Panel - Full Width */}
+      <div className="h-[280px] min-h-[200px] border-t border-border bg-background">
         <ChatPanel
           messages={messages}
           isProcessing={isProcessing}
           onSend={handleSend}
         />
-      </div>
-
-      {/* Right Panel: Metrics + Monitor + Logs - 2/3 width */}
-      <div className="flex-1 flex flex-col bg-background overflow-hidden">
-        {/* Metrics Overview - Fixed Height */}
-        <div className="p-4 border-b border-border overflow-y-auto" style={{ maxHeight: '45%' }}>
-          <MetricsOverview metrics={metrics} />
-        </div>
-        
-        {/* System Monitor - Scrollable */}
-        <div className="flex-1 p-4 overflow-y-auto border-b border-border">
-          <SystemMonitor
-            services={mockServices}
-            dbusServices={mockDbusServices}
-            diagnostics={mockDiagnostics}
-            tools={mockTools}
-            connectionStatus={connectionStatus}
-          />
-        </div>
-        
-        {/* Tool Log - Bottom panel */}
-        <div className="h-1/4 min-h-[150px]">
-          <ToolLog logs={toolLogs} />
-        </div>
       </div>
     </div>
   );

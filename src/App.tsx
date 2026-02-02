@@ -7,6 +7,7 @@ import { Layout } from "@/components/Layout";
 import IntegratedDashboard from "./pages/IntegratedDashboard";
 import SystemPrompt from "./pages/SystemPrompt";
 import Tools from "./pages/Tools";
+import McpExecution from "./pages/McpExecution";
 import Plugins from "./pages/Plugins";
 import Audit from "./pages/Audit";
 import NotFound from "./pages/NotFound";
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/" element={<IntegratedDashboard />} />
             <Route path="/system-prompt" element={<SystemPrompt />} />
             <Route path="/tools" element={<Tools />} />
+            <Route path="/mcp-execution" element={<McpExecution />} />
             <Route path="/workflows" element={<Audit />} />
             <Route path="/mcp-groups" element={<Audit />} />
             <Route path="/plugins" element={<Plugins />} />

@@ -7,7 +7,6 @@ import {
   SystemDiagnostics,
   ToolDefinition,
 } from "@/components/dashboard/SystemMonitor";
-import { ToolLog, ToolCall } from "@/components/dashboard/ToolLog";
 import { MetricsOverview, SystemMetrics } from "@/components/dashboard/MetricsOverview";
 
 // Mock metrics data - will be replaced with real API calls
@@ -90,7 +89,6 @@ export default function IntegratedDashboard() {
     },
   ]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [toolLogs, setToolLogs] = useState<ToolCall[]>([]);
   const [connectionStatus] = useState<"connected" | "connecting" | "disconnected">("connected");
   const [metrics] = useState<SystemMetrics>(mockMetrics);
 
@@ -104,16 +102,6 @@ export default function IntegratedDashboard() {
     setIsProcessing(true);
 
     setTimeout(() => {
-      const toolCall: ToolCall = {
-        id: Date.now().toString(),
-        toolName: "list_services",
-        args: { filter: "active" },
-        timestamp: new Date().toLocaleTimeString(),
-        status: "success",
-        result: { count: 8 },
-      };
-      setToolLogs((prev) => [toolCall, ...prev]);
-
       const assistantMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
@@ -126,27 +114,22 @@ export default function IntegratedDashboard() {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Top Section: Metrics + Monitor + Tool Log */}
+      {/* Top Section: Metrics + Monitor */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left: Metrics Overview */}
         <div className="flex-1 p-4 overflow-y-auto border-r border-border">
           <MetricsOverview metrics={metrics} />
         </div>
         
-        {/* Right: System Monitor + Tool Log stacked */}
-        <div className="w-1/2 flex flex-col overflow-hidden">
-          <div className="flex-1 p-4 overflow-y-auto border-b border-border">
-            <SystemMonitor
-              services={mockServices}
-              dbusServices={mockDbusServices}
-              diagnostics={mockDiagnostics}
-              tools={mockTools}
-              connectionStatus={connectionStatus}
-            />
-          </div>
-          <div className="h-[200px] min-h-[150px]">
-            <ToolLog logs={toolLogs} />
-          </div>
+        {/* Right: System Monitor */}
+        <div className="w-1/2 p-4 overflow-y-auto">
+          <SystemMonitor
+            services={mockServices}
+            dbusServices={mockDbusServices}
+            diagnostics={mockDiagnostics}
+            tools={mockTools}
+            connectionStatus={connectionStatus}
+          />
         </div>
       </div>
 

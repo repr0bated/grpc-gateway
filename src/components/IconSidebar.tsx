@@ -7,6 +7,7 @@ import {
   Users,
   Settings,
   FileCode,
+  Terminal,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ const navItems: NavItem[] = [
   { icon: LayoutGrid, label: "Dashboard", path: "/" },
   { icon: FileText, label: "System Prompt", path: "/system-prompt" },
   { icon: Wrench, label: "Tools", path: "/tools" },
+  { icon: Terminal, label: "MCP Execution", path: "/mcp-execution" },
   { icon: Activity, label: "Workflows", path: "/workflows" },
   { icon: Users, label: "MCP Groups", path: "/mcp-groups" },
   { icon: Settings, label: "Plugins", path: "/plugins" },

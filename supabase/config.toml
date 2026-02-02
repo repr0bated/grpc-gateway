@@ -1,1 +1,4 @@
 project_id = "hubavavdnyycnjlalwik"
+
+[functions.grpc-proxy]
+verify_jwt = false

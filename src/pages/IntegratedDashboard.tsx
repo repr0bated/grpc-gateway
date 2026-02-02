@@ -8,8 +8,55 @@ import {
   ToolDefinition,
 } from "@/components/dashboard/SystemMonitor";
 import { ToolLog, ToolCall } from "@/components/dashboard/ToolLog";
+import { MetricsOverview, SystemMetrics } from "@/components/dashboard/MetricsOverview";
 
-// Mock data for demonstration
+// Mock metrics data - will be replaced with real API calls
+const mockMetrics: SystemMetrics = {
+  // System
+  hostname: "op-dbus-server",
+  kernel: "Linux 6.1.0-18-amd64",
+  uptime: "14d 3h 22m",
+  loadAverage: [0.42, 0.38, 0.35] as [number, number, number],
+  memoryUsedPercent: 26,
+  memoryFormatted: "4.2 GB / 16 GB",
+  cpuCores: 8,
+  cpuUsage: 12.5,
+  
+  // Tools - every D-Bus object is a tool
+  totalTools: 16847,
+  toolsByCategory: {
+    dbus: 15234,
+    systemd: 892,
+    ovs: 156,
+    file: 234,
+    system: 187,
+    plugin: 78,
+    other: 66,
+  },
+  
+  // Agents
+  agentTypesAvailable: 70,
+  agentInstancesRunning: 12,
+  
+  // LLM
+  llmProvider: "Gemini",
+  llmModel: "gemini-2.0-flash",
+  llmAvailable: true,
+  
+  // Network
+  networkInterfaces: 8,
+  interfacesUp: 6,
+  
+  // Services
+  servicesActive: 47,
+  servicesTotal: 52,
+  
+  // Connections
+  connectedUsers: 3,
+  activeSessions: 5,
+};
+
+// Mock data for services and tools panels
 const mockServices: SystemService[] = [
   { id: "1", name: "nginx.service", status: "active", subState: "running" },
   { id: "2", name: "postgresql.service", status: "active", subState: "running" },
@@ -59,6 +106,7 @@ export default function IntegratedDashboard() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [toolLogs, setToolLogs] = useState<ToolCall[]>([]);
   const [connectionStatus] = useState<"connected" | "connecting" | "disconnected">("connected");
+  const [metrics] = useState<SystemMetrics>(mockMetrics);
 
   const handleSend = (message: string) => {
     const userMessage: ChatMessage = {
@@ -94,7 +142,7 @@ export default function IntegratedDashboard() {
   return (
     <div className="flex h-full">
       {/* Chat Panel - 1/3 width */}
-      <div className="w-1/3 border-r border-border bg-background">
+      <div className="w-1/3 border-r border-border bg-background flex flex-col">
         <ChatPanel
           messages={messages}
           isProcessing={isProcessing}
@@ -102,8 +150,14 @@ export default function IntegratedDashboard() {
         />
       </div>
 
-      {/* Right Panel: Monitor + Logs - 2/3 width */}
-      <div className="flex-1 flex flex-col bg-background">
+      {/* Right Panel: Metrics + Monitor + Logs - 2/3 width */}
+      <div className="flex-1 flex flex-col bg-background overflow-hidden">
+        {/* Metrics Overview - Fixed Height */}
+        <div className="p-4 border-b border-border overflow-y-auto" style={{ maxHeight: '45%' }}>
+          <MetricsOverview metrics={metrics} />
+        </div>
+        
+        {/* System Monitor - Scrollable */}
         <div className="flex-1 p-4 overflow-y-auto border-b border-border">
           <SystemMonitor
             services={mockServices}
@@ -113,7 +167,9 @@ export default function IntegratedDashboard() {
             connectionStatus={connectionStatus}
           />
         </div>
-        <div className="h-1/3">
+        
+        {/* Tool Log - Bottom panel */}
+        <div className="h-1/4 min-h-[150px]">
           <ToolLog logs={toolLogs} />
         </div>
       </div>

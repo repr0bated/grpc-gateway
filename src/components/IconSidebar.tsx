@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutGrid,
+  MessageSquare,
   FileText,
   Wrench,
   Activity,
@@ -19,6 +20,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { icon: LayoutGrid, label: "Dashboard", path: "/" },
+  { icon: MessageSquare, label: "Assistant", path: "/assistant" },
   { icon: FileText, label: "System Prompt", path: "/system-prompt" },
   { icon: Wrench, label: "Tools", path: "/tools" },
   { icon: Terminal, label: "MCP Execution", path: "/mcp-execution" },

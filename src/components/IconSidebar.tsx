@@ -6,6 +6,7 @@ import {
   Wrench,
   Terminal,
   Bot,
+  GitBranch,
   Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,6 +24,7 @@ const navItems: NavItem[] = [
   { icon: Wrench, label: "Tools", path: "/tools" },
   { icon: Terminal, label: "MCP Execution", path: "/mcp-execution" },
   { icon: Bot, label: "Agents", path: "/agents" },
+  { icon: GitBranch, label: "Workflows", path: "/workflows" },
   { icon: Settings, label: "Plugins", path: "/plugins" },
 ];
 

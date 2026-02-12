@@ -147,21 +147,18 @@ export default function IntegratedDashboard() {
   );
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 flex overflow-hidden">
-        <div className="flex-1 p-4 overflow-y-auto border-r border-border">
-          <MetricsOverview metrics={metrics} />
-        </div>
-
-        <div className="w-1/2 p-4 overflow-y-auto">
-          <SystemMonitor
-            services={services}
-            dbusServices={dbusServices}
-            diagnostics={diagnostics}
-            tools={tools}
-            connectionStatus={connectionStatus}
-          />
-        </div>
+    <div className="flex flex-col h-full overflow-y-auto">
+      <div className="p-4">
+        <MetricsOverview metrics={metrics} />
+      </div>
+      <div className="p-4 pt-0">
+        <SystemMonitor
+          services={services}
+          dbusServices={dbusServices}
+          diagnostics={diagnostics}
+          tools={tools}
+          connectionStatus={connectionStatus}
+        />
       </div>
     </div>
   );

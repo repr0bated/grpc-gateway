@@ -4,11 +4,9 @@ import {
   MessageSquare,
   FileText,
   Wrench,
-  Activity,
-  Users,
-  Settings,
-  FileCode,
   Terminal,
+  Bot,
+  Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -24,10 +22,8 @@ const navItems: NavItem[] = [
   { icon: FileText, label: "System Prompt", path: "/system-prompt" },
   { icon: Wrench, label: "Tools", path: "/tools" },
   { icon: Terminal, label: "MCP Execution", path: "/mcp-execution" },
-  { icon: Activity, label: "Workflows", path: "/workflows" },
-  { icon: Users, label: "MCP Groups", path: "/mcp-groups" },
+  { icon: Bot, label: "Agents", path: "/agents" },
   { icon: Settings, label: "Plugins", path: "/plugins" },
-  { icon: FileCode, label: "Logs", path: "/logs" },
 ];
 
 interface IconSidebarProps {

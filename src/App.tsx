@@ -11,6 +11,7 @@ import Tools from "./pages/Tools";
 import McpExecution from "./pages/McpExecution";
 import Plugins from "./pages/Plugins";
 import Agents from "./pages/Agents";
+import Workflows from "./pages/Workflows";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/tools" element={<Tools />} />
             <Route path="/mcp-execution" element={<McpExecution />} />
             <Route path="/agents" element={<Agents />} />
+            <Route path="/workflows" element={<Workflows />} />
             <Route path="/plugins" element={<Plugins />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

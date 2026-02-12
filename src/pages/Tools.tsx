@@ -1,31 +1,58 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Wrench, Search, Filter } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { apiGet } from '@/lib/backend';
 
-const mockTools = [
-  { name: 'file_read', category: 'filesystem', description: 'Read file contents' },
-  { name: 'file_write', category: 'filesystem', description: 'Write data to file' },
-  { name: 'process_spawn', category: 'process', description: 'Spawn new process' },
-  { name: 'network_request', category: 'network', description: 'Make HTTP request' },
-  { name: 'db_query', category: 'database', description: 'Execute database query' },
-  { name: 'cache_get', category: 'cache', description: 'Retrieve from cache' },
-];
+interface ToolItem {
+  name: string;
+  category: string;
+  description: string;
+}
+
+interface ToolsResponse {
+  tools: ToolItem[];
+  count: number;
+}
 
 export default function Tools() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [tools, setTools] = useState<ToolItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const filteredTools = mockTools.filter(tool =>
-    tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    tool.category.toLowerCase().includes(searchQuery.toLowerCase())
+  const loadTools = async () => {
+    setLoading(true);
+    try {
+      const data = await apiGet<ToolsResponse>('/api/tools');
+      setTools(data.tools || []);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load tools');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadTools();
+  }, []);
+
+  const filteredTools = useMemo(
+    () => tools.filter((tool) =>
+      tool.name.toLowerCase().includes(searchQuery.toLowerCase())
+      || tool.category.toLowerCase().includes(searchQuery.toLowerCase())
+      || tool.description.toLowerCase().includes(searchQuery.toLowerCase()),
+    ),
+    [tools, searchQuery],
   );
 
   return (
     <div className="p-8 max-w-[1600px]">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Tool Registry</h1>
-        <p className="text-muted-foreground">16,000+ native tools explorer</p>
+        <p className="text-muted-foreground">Live tools from backend registry</p>
       </div>
 
       <Card className="mb-6">
@@ -45,7 +72,7 @@ export default function Tools() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" onClick={loadTools}>
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
@@ -53,28 +80,36 @@ export default function Tools() {
         </CardHeader>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filteredTools.map((tool) => (
-          <Card key={tool.name} className="hover:border-primary transition-colors cursor-pointer">
-            <CardHeader className="pb-2">
-              <div className="flex items-center gap-2">
-                <Wrench className="h-4 w-4 text-primary" />
-                <CardTitle className="text-base font-mono">{tool.name}</CardTitle>
-              </div>
-              <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary w-fit">
-                {tool.category}
-              </span>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">{tool.description}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {loading ? (
+        <div className="text-sm text-muted-foreground">Loading tools...</div>
+      ) : error ? (
+        <div className="text-sm text-destructive">{error}</div>
+      ) : (
+        <>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {filteredTools.map((tool) => (
+              <Card key={tool.name} className="hover:border-primary transition-colors cursor-pointer">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center gap-2">
+                    <Wrench className="h-4 w-4 text-primary" />
+                    <CardTitle className="text-base font-mono">{tool.name}</CardTitle>
+                  </div>
+                  <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary w-fit">
+                    {tool.category}
+                  </span>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">{tool.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
 
-      <div className="mt-8 text-center py-8 text-muted-foreground">
-        <p className="text-sm">Showing {filteredTools.length} of 16,384 tools</p>
-      </div>
+          <div className="mt-8 text-center py-8 text-muted-foreground">
+            <p className="text-sm">Showing {filteredTools.length} of {tools.length} tools</p>
+          </div>
+        </>
+      )}
     </div>
   );
 }

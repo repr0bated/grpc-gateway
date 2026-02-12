@@ -2,61 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-/* OP-DBUS Design System - Slate/Indigo Theme (from op-web-ui) */
+/* OP-DBUS Design System - Slate/Orange Geek Theme */
 
 @layer base {
   :root {
-    /* Modern Dark Theme - Slate/Indigo Palette */
-    --background: 222 47% 11%;           /* #0f172a - Slate 900 */
-    --foreground: 210 40% 98%;           /* #f8fafc - Slate 50 */
+    /* Deep dark base */
+    --background: 220 20% 7%;              /* #0e1117 */
+    --foreground: 210 20% 90%;             /* #dde3ea */
 
-    --card: 217 33% 17%;                 /* #1e293b - Slate 800 */
-    --card-foreground: 210 40% 98%;      /* #f8fafc - Slate 50 */
+    --card: 220 18% 11%;                   /* #161b24 */
+    --card-foreground: 210 20% 90%;
 
-    --popover: 217 33% 17%;              /* #1e293b - Slate 800 */
-    --popover-foreground: 210 40% 98%;   /* #f8fafc - Slate 50 */
+    --popover: 220 18% 11%;
+    --popover-foreground: 210 20% 90%;
 
-    --primary: 239 84% 67%;              /* #6366f1 - Indigo 500 */
+    /* Orange accent system */
+    --primary: 24 95% 53%;                 /* #f97316 - Orange 500 */
     --primary-foreground: 0 0% 100%;
+    --primary-glow: 24 100% 60%;           /* brighter orange for glows */
 
-    --secondary: 215 25% 27%;            /* #334155 - Slate 700 */
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 220 14% 18%;              /* #252b37 */
+    --secondary-foreground: 210 20% 90%;
 
-    --muted: 215 25% 27%;                /* #334155 - Slate 700 */
-    --muted-foreground: 215 16% 47%;     /* #64748b - Slate 500 */
+    --muted: 220 14% 18%;
+    --muted-foreground: 215 12% 48%;       /* #6b7a8d */
 
-    --accent: 239 84% 67%;               /* #6366f1 - Indigo 500 */
+    --accent: 24 95% 53%;                  /* Orange 500 */
     --accent-foreground: 0 0% 100%;
-    --accent-hover: 239 83% 66%;         /* #4f46e5 - Indigo 600 */
-    --accent-light: 239 91% 76%;         /* #818cf8 - Indigo 400 */
+    --accent-hover: 24 94% 46%;            /* #ea580c - Orange 600 */
+    --accent-light: 27 96% 61%;            /* #fb923c - Orange 400 */
 
-    --destructive: 0 84% 60%;            /* #ef4444 - Red 500 */
+    --destructive: 0 72% 51%;              /* #dc2626 */
     --destructive-foreground: 0 0% 100%;
 
-    --success: 160 84% 39%;              /* #10b981 - Emerald 500 */
+    --success: 142 71% 45%;                /* #22c55e */
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;               /* #f59e0b - Amber 500 */
-    --warning-foreground: 0 0% 100%;
+    --warning: 45 93% 47%;                 /* #eab308 */
+    --warning-foreground: 0 0% 0%;
 
-    --border: 215 25% 27%;               /* #334155 - Slate 700 */
-    --input: 215 25% 27%;                /* #334155 - Slate 700 */
-    --ring: 239 84% 67%;                 /* #6366f1 - Indigo 500 */
+    --border: 220 13% 18%;                 /* #252d3a */
+    --input: 220 13% 18%;
+    --ring: 24 95% 53%;
 
     --radius: 0.5rem;
 
-    /* Sidebar - Gradient feel */
-    --sidebar-background: 217 33% 17%;   /* #1e293b - Slate 800 */
-    --sidebar-foreground: 215 20% 65%;   /* #94a3b8 - Slate 400 */
-    --sidebar-primary: 239 84% 67%;      /* #6366f1 - Indigo 500 */
+    /* Sidebar */
+    --sidebar-background: 220 18% 9%;     /* #121721 */
+    --sidebar-foreground: 215 12% 55%;
+    --sidebar-primary: 24 95% 53%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 25% 27%;       /* #334155 - Slate 700 */
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 215 25% 27%;       /* #334155 - Slate 700 */
-    --sidebar-ring: 239 84% 67%;
+    --sidebar-accent: 220 14% 16%;
+    --sidebar-accent-foreground: 210 20% 90%;
+    --sidebar-border: 220 13% 15%;
+    --sidebar-ring: 24 95% 53%;
 
-    /* Hover states */
-    --hover: 215 20% 34%;                /* #475569 - Slate 600 */
+    --hover: 220 14% 22%;
   }
 }
 
@@ -67,15 +68,17 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Consolas, monospace;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-size: 13px;
+    letter-spacing: -0.01em;
   }
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
@@ -88,22 +91,65 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--muted-foreground));
+    background: hsl(var(--primary) / 0.5);
   }
 }
 
 /* Custom utility classes */
 @layer utilities {
   .text-gradient {
-    background: linear-gradient(135deg, #fff, #94a3b8);
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent-light)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-cool {
+    background: linear-gradient(135deg, hsl(var(--foreground)), hsl(var(--muted-foreground)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .bg-glass {
-    background: rgba(15, 23, 42, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: hsl(var(--card) / 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.15), 0 0 40px hsl(var(--primary) / 0.05);
+  }
+
+  .glow-success {
+    box-shadow: 0 0 12px hsl(var(--success) / 0.3);
+  }
+
+  .border-glow {
+    border-color: hsl(var(--primary) / 0.3);
+  }
+
+  .card-hover {
+    transition: all 0.2s ease;
+  }
+  .card-hover:hover {
+    border-color: hsl(var(--primary) / 0.4);
+    box-shadow: 0 0 24px hsl(var(--primary) / 0.08);
+    transform: translateY(-1px);
+  }
+
+  /* Scanline effect for terminal feel */
+  .scanline::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      hsl(var(--primary) / 0.015) 2px,
+      hsl(var(--primary) / 0.015) 4px
+    );
+    pointer-events: none;
   }
 }

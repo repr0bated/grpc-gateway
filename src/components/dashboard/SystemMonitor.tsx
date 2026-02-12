@@ -53,7 +53,7 @@ export function SystemMonitor({
     <div className="space-y-4">
       {/* Diagnostics Header */}
       {diagnostics && (
-        <div className="bg-gradient-to-r from-card to-background border border-border rounded-lg p-4">
+        <div className="bg-gradient-to-r from-card to-background border border-border rounded-lg p-4 glow-pulse relative overflow-hidden scanline">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
               <div

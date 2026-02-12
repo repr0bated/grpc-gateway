@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { 
   Wrench, 
   Bot, 
@@ -236,22 +237,24 @@ function MetricCard({ icon, label, value, subtext, color, glow, status }: Metric
   return (
     <div className={`
       bg-gradient-to-br from-card to-card/80 border border-border rounded-lg p-3
-      transition-all duration-200 hover:border-primary/50
-      ${glow ? glowMap[color] : ""}
+      transition-all duration-300 hover:border-primary/50 card-hover group relative overflow-hidden
+      ${glow ? glowMap[color] + " glow-pulse" : ""}
     `}>
+      {/* Corner accent */}
+      <div className="absolute top-0 right-0 w-8 h-8 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-xl opacity-0 group-hover:opacity-100 transition-opacity" />
       <div className="flex items-center gap-2 mb-2">
-        <div className={colorMap[color]}>{icon}</div>
+        <div className={cn(colorMap[color], "transition-transform duration-300 group-hover:scale-110")}>{icon}</div>
         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
           {label}
         </span>
         {status && (
-          <div className={`ml-auto h-2 w-2 rounded-full ${
-            status === "healthy" ? "bg-success" : 
-            status === "warning" ? "bg-warning" : "bg-destructive"
-          }`} />
+          <div className={cn("ml-auto h-2 w-2 rounded-full radar-ping",
+            status === "healthy" ? "bg-success text-success" : 
+            status === "warning" ? "bg-warning text-warning" : "bg-destructive text-destructive"
+          )} />
         )}
       </div>
-      <div className={`text-2xl font-bold ${colorMap[color]}`}>{value}</div>
+      <div className={`text-2xl font-bold ${colorMap[color]} flicker`}>{value}</div>
       <div className="text-xs text-muted-foreground mt-1">{subtext}</div>
     </div>
   );
@@ -272,19 +275,22 @@ function ResourceMeter({ icon, label, value, format }: ResourceMeterProps) {
   };
 
   return (
-    <div className="bg-gradient-to-br from-card to-card/80 border border-border rounded-lg p-3">
+    <div className="bg-gradient-to-br from-card to-card/80 border border-border rounded-lg p-3 card-hover group relative overflow-hidden">
       <div className="flex items-center gap-2 mb-2">
-        <div className="text-muted-foreground">{icon}</div>
+        <div className="text-muted-foreground group-hover:text-primary transition-colors">{icon}</div>
         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
           {label}
         </span>
+        <span className="ml-auto text-[10px] font-mono text-muted-foreground">{value.toFixed(0)}%</span>
       </div>
       <div className="text-lg font-bold text-foreground">{format(value)}</div>
-      <div className="mt-2 h-1.5 bg-muted rounded-full overflow-hidden">
+      <div className="mt-2 h-1.5 bg-muted rounded-full overflow-hidden relative">
         <div
-          className={`h-full ${getColor(value)} transition-all duration-500`}
+          className={`h-full ${getColor(value)} transition-all duration-700 ease-out relative`}
           style={{ width: `${Math.min(100, value)}%` }}
-        />
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-[shimmer_2s_infinite]" />
+        </div>
       </div>
     </div>
   );

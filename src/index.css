@@ -152,4 +152,72 @@
     );
     pointer-events: none;
   }
+
+  /* Animated gradient border */
+  .border-gradient {
+    position: relative;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+  }
+  .border-gradient::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.5), transparent 40%, transparent 60%, hsl(var(--primary) / 0.3));
+    z-index: -1;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    padding: 1px;
+  }
+
+  /* Glow pulse animation */
+  .glow-pulse {
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+
+  /* Flicker for terminal */
+  .flicker {
+    animation: flicker 4s linear infinite;
+  }
+
+  /* Radar sweep for status dots */
+  .radar-ping {
+    position: relative;
+  }
+  .radar-ping::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 9999px;
+    border: 1px solid currentColor;
+    opacity: 0;
+    animation: radarPing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 10px hsl(var(--primary) / 0.1), 0 0 30px hsl(var(--primary) / 0.05); }
+  50% { box-shadow: 0 0 20px hsl(var(--primary) / 0.25), 0 0 50px hsl(var(--primary) / 0.1); }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+
+@keyframes radarPing {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }

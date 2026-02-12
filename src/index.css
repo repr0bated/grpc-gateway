@@ -221,3 +221,106 @@
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
+
+/* ═══ CRT Monitor Effects ═══ */
+
+.crt-screen {
+  position: relative;
+  /* Subtle barrel distortion via SVG filter */
+  filter: url(#crt-warp);
+  /* Vignette + scanlines overlay */
+}
+.crt-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    hsl(var(--primary) / 0.03) 1px,
+    hsl(var(--primary) / 0.03) 2px
+  );
+  pointer-events: none;
+  z-index: 50;
+}
+.crt-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 60%, hsl(var(--background) / 0.7) 100%);
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Power-on horizontal line */
+.crt-powerline {
+  width: 100%;
+  height: 2px;
+  background: hsl(var(--primary));
+  box-shadow: 0 0 30px 8px hsl(var(--primary) / 0.6), 0 0 80px 20px hsl(var(--primary) / 0.3);
+  animation: crtPowerOn 0.8s ease-out forwards;
+}
+
+@keyframes crtPowerOn {
+  0% { transform: scaleX(0) scaleY(0.5); opacity: 0; }
+  30% { transform: scaleX(0.01) scaleY(40); opacity: 1; }
+  60% { transform: scaleX(0.6) scaleY(1); opacity: 1; }
+  100% { transform: scaleX(1) scaleY(1); opacity: 1; }
+}
+
+/* Boot text */
+.crt-boot-text {
+  padding: 2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: hsl(var(--primary));
+}
+
+.boot-line {
+  opacity: 0;
+  animation: bootLineIn 0.15s ease-out forwards;
+}
+
+@keyframes bootLineIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Blinking cursor */
+.crt-cursor {
+  animation: cursorBlink 0.6s step-end infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Horizontal scan bar */
+.crt-scanbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.15), transparent);
+  box-shadow: 0 0 20px 4px hsl(var(--primary) / 0.1);
+  animation: scanDown 1.4s linear infinite;
+  z-index: 51;
+}
+
+@keyframes scanDown {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+/* Final fade-in when dashboard appears */
+.crt-fadein {
+  animation: crtFadeIn 0.5s ease-out;
+}
+
+@keyframes crtFadeIn {
+  0% { opacity: 0; filter: brightness(3) saturate(0); }
+  30% { opacity: 1; filter: brightness(1.8) saturate(0.3); }
+  100% { opacity: 1; filter: brightness(1) saturate(1); }
+}

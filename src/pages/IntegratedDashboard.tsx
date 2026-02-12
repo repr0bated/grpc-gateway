@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import {
   SystemMonitor,
   SystemService,
@@ -146,8 +146,50 @@ export default function IntegratedDashboard() {
     [toolData],
   );
 
+  /* ── boot-up sequence ── */
+  const [bootPhase, setBootPhase] = useState<'off' | 'power' | 'scan' | 'ready'>('off');
+  const bootTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setBootPhase('power'), 200);
+    const t2 = setTimeout(() => setBootPhase('scan'), 1200);
+    const t3 = setTimeout(() => setBootPhase('ready'), 2600);
+    bootTimers.current = [t1, t2, t3];
+    return () => bootTimers.current.forEach(clearTimeout);
+  }, []);
+
+  if (bootPhase === 'off') {
+    return <div className="h-full w-full bg-black" />;
+  }
+
+  if (bootPhase === 'power') {
+    return (
+      <div className="h-full w-full bg-black flex items-center justify-center crt-screen">
+        <div className="crt-powerline" />
+      </div>
+    );
+  }
+
+  if (bootPhase === 'scan') {
+    return (
+      <div className="h-full w-full bg-background crt-screen relative overflow-hidden">
+        <div className="crt-boot-text">
+          <p className="boot-line" style={{ animationDelay: '0ms' }}>BIOS v3.7.1 — OP-DBUS Control Plane</p>
+          <p className="boot-line" style={{ animationDelay: '150ms' }}>Initializing D-Bus subsystem...</p>
+          <p className="boot-line" style={{ animationDelay: '300ms' }}>Loading kernel modules... <span className="text-success">OK</span></p>
+          <p className="boot-line" style={{ animationDelay: '450ms' }}>MCP protocol handshake... <span className="text-success">OK</span></p>
+          <p className="boot-line" style={{ animationDelay: '600ms' }}>Enumerating tools &amp; agents... <span className="text-success">OK</span></p>
+          <p className="boot-line" style={{ animationDelay: '750ms' }}>Mounting /sys/op-dbus... <span className="text-success">OK</span></p>
+          <p className="boot-line" style={{ animationDelay: '900ms' }}>LLM engine online... <span className="text-primary">READY</span></p>
+          <p className="boot-line" style={{ animationDelay: '1050ms' }}>Launching control plane <span className="crt-cursor">█</span></p>
+        </div>
+        <div className="crt-scanbar" />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col h-full overflow-y-auto">
+    <div className="flex flex-col h-full overflow-y-auto crt-screen crt-fadein">
       <div className="p-4">
         <MetricsOverview metrics={metrics} />
       </div>
